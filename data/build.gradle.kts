@@ -55,4 +55,6 @@ dependencies {
     // Hilt + KSP
     implementation("com.google.dagger:hilt-android:2.56.2")
     ksp("com.google.dagger:hilt-compiler:2.56.2")
+
+    testImplementation("junit:junit:4.13.2")
 }
