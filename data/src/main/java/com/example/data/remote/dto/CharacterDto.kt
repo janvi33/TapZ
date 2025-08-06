@@ -1,9 +1,8 @@
 package com.example.data.remote.dto
 
-import java.net.URL
+import com.google.gson.annotations.SerializedName
 
 data class CharacterDto(
-    val _id:Int,
-    val name: String,
-    val imageURL: String
+    @SerializedName("imageUrl")
+   val imageUrl: String
 )
