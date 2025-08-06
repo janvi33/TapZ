@@ -9,48 +9,76 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun SettingsScreen(
-    state: SettingsState,
-    onEvent: (SettingsIntent) -> Unit
+    isDarkTheme: Boolean = false,
+    isSoundEnabled: Boolean = true,
+    onToggleTheme: () -> Unit,
+    onToggleSound: () -> Unit,
+    onLogoutConfirmed: () -> Unit
 ) {
+    var showLogoutDialog by remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(24.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+            .padding(32.dp),
+        verticalArrangement = Arrangement.spacedBy(24.dp, Alignment.CenterVertically),
+        horizontalAlignment = Alignment.Start
     ) {
         Text("Settings", style = MaterialTheme.typography.headlineLarge)
 
-        Spacer(modifier = Modifier.height(24.dp))
-
+        // 🌗 Theme Toggle
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("Dark Theme", modifier = Modifier.weight(1f))
-            Switch(
-                checked = state.isDarkTheme,
-                onCheckedChange = { onEvent(SettingsIntent.ToggleTheme) }
-            )
+            Text("Dark Theme")
+            Spacer(modifier = Modifier.weight(1f))
+            Switch(checked = isDarkTheme, onCheckedChange = { onToggleTheme() })
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
+        // 🔊 Sound Toggle
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("Sound", modifier = Modifier.weight(1f))
-            Switch(
-                checked = state.isSoundOn,
-                onCheckedChange = { onEvent(SettingsIntent.ToggleSound) }
-            )
+            Text("Sound")
+            Spacer(modifier = Modifier.weight(1f))
+            Switch(checked = isSoundEnabled, onCheckedChange = { onToggleSound() })
         }
 
-        Spacer(modifier = Modifier.height(32.dp))
-
-        Button(onClick = { onEvent(SettingsIntent.LogoutClicked) }) {
+        // 🚪 Logout Button
+        Button(
+            onClick = { showLogoutDialog = true },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.error
+            ),
+            modifier = Modifier.fillMaxWidth()
+        ) {
             Text("Logout")
         }
+    }
+
+    // 🧠 Logout Confirmation Dialog
+    if (showLogoutDialog) {
+        AlertDialog(
+            onDismissRequest = { showLogoutDialog = false },
+            title = { Text("Confirm Logout") },
+            text = { Text("Are you sure you want to logout?") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showLogoutDialog = false
+                        onLogoutConfirmed()
+                    }
+                ) {
+                    Text("Yes")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showLogoutDialog = false }) {
+                    Text("Cancel")
+                }
+            }
+        )
     }
 }

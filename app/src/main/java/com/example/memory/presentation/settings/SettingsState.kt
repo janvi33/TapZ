@@ -1,4 +1,7 @@
 package com.example.memory.presentation.settings
 
-class SettingsState {
-}
+data class SettingsState(
+    val isDarkTheme: Boolean = false,
+    val isSoundOn: Boolean = true,
+    val isLoggedOut: Boolean = false
+)
