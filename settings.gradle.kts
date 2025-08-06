@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Memory"
 include(":app")
- 
+
