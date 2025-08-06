@@ -1,4 +1,7 @@
 package com.example.memory.presentation.settings
 
-class SettingsIntent {
+sealed class SettingsIntent {
+    data object ToggleTheme : SettingsIntent()
+    data object ToggleSound : SettingsIntent()
+    data object LogoutClicked : SettingsIntent()
 }

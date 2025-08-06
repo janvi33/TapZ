@@ -20,7 +20,8 @@ fun LoginScreenUI(
     error: String?,
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
-    onLoginClick: () -> Unit
+    onLoginClick: () -> Unit,
+    onNavigateToSignup: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -66,6 +67,11 @@ fun LoginScreenUI(
             Spacer(modifier = Modifier.height(8.dp))
             Text(text = it, color = MaterialTheme.colorScheme.error)
         }
+
+        TextButton(onClick = onNavigateToSignup) {
+            Text("Don't have an account? Sign up")
+        }
+
     }
 }
 
@@ -79,7 +85,8 @@ fun LoginScreenPreview() {
         error = null,
         onEmailChange = {},
         onPasswordChange = {},
-        onLoginClick = {}
+        onLoginClick = {},
+        onNavigateToSignup = {}
     )
 }
 
@@ -88,7 +95,8 @@ fun LoginScreenPreview() {
 fun LoginScreen(
     modifier: Modifier = Modifier,
     viewModel: LoginViewModel = hiltViewModel(),
-    onLoginSuccess: () -> Unit
+    onLoginSuccess: () -> Unit,
+    onNavigateToSignup: () -> Unit
 ) {
     val state = viewModel.state
 
@@ -104,6 +112,8 @@ fun LoginScreen(
         error = state.error,
         onEmailChange = { viewModel.onEvent(LoginIntent.EmailChanged(it)) },
         onPasswordChange = { viewModel.onEvent(LoginIntent.PasswordChanged(it)) },
-        onLoginClick = { viewModel.onEvent(LoginIntent.LoginClicked) }
+        onLoginClick = { viewModel.onEvent(LoginIntent.LoginClicked) },
+        onNavigateToSignup = onNavigateToSignup
     )
+
 }
