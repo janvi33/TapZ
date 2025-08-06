@@ -21,4 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "Memory"
 include(":app")
- 
+include(":domain")
+include(":data")
