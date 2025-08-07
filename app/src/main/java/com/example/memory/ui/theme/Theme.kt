@@ -12,25 +12,35 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
+val AccentGold = Color(0xF0FFD882) // darker gold accent color
+
 private val LightColorScheme = lightColorScheme(
-    primary = Color(0xFFFF9800),      // Saiyan Orange
-    secondary = Color(0xFF03A9F4),    // Power Blue
-    background = Color(0xFFF5F5F5),   // Cloud White
-    surface = Color.White,
-    onPrimary = Color.White,
+    primary = Color(0xFFFF812C),      // Super Saiyan Gold
+    secondary = Color(0xFF2196F3),
+    tertiary = AccentGold,      // Kamehameha Blue
+    background = Color(0xFFFFF8E1),   // Light Aura Background
+    surface = Color(0xFFFFFFFF),      // Capsule White
+    onPrimary = Color.Black,
+    onSecondary = Color.White,
     onBackground = Color.Black,
-    onSurface = Color.Black
+    onSurface = Color.Black,
+    error = Color(0xFFD32F2F)         // Frieza Red
 )
 
+
 private val DarkColorScheme = darkColorScheme(
-    primary = Color(0xFFFF9800),
-    secondary = Color(0xFF03A9F4),
-    background = Color(0xFF1C1C1C),   // Space Black
-    surface = Color(0xFF2C2C2C),
+    primary = Color(0xFFFF9800),      // Saiyan Orange
+    secondary = Color(0xFF03A9F4),    // Power Blue
+    tertiary = AccentGold,
+    background = Color(0xFF121212),   // Deep Space
+    surface = Color(0xFF2C2C2C),      // Capsule Gray
     onPrimary = Color.Black,
+    onSecondary = Color.Black,
     onBackground = Color.White,
-    onSurface = Color.White
+    onSurface = Color.White,
+    error = Color(0xFFF44336)         // DBZ Danger Red
 )
+
 
 
     /* Other default colors to override
@@ -47,7 +57,7 @@ private val DarkColorScheme = darkColorScheme(
 @Composable
 fun MemoryTheme(
     darkTheme: Boolean, // no default
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
