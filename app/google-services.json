@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "25082278616",
+    "project_id": "memory-3be26",
+    "storage_bucket": "memory-3be26.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:25082278616:android:19df43ca3d9a8fc2fa9dad",
+        "android_client_info": {
+          "package_name": "com.example.memory"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsUMG322OeQUaNyF8oGh0e5LasFM9QW4U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

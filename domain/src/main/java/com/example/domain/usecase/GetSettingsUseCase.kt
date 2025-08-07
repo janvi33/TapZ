@@ -1,0 +1,10 @@
+package com.example.domain.usecase
+
+import com.example.domain.model.Settings
+import com.example.domain.repository.SettingsRepository
+
+class GetSettingsUseCase(val settingsRepository: SettingsRepository) {
+    suspend operator fun invoke(): Settings {
+        return settingsRepository.getSettings()
+    }
+}
