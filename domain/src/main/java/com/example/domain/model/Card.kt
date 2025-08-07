@@ -3,9 +3,10 @@ package com.example.domain.model
 
 //For API
 //data class Card (
-//    val suit: String?,
-//    val value: String,
-//    val image: String?
+//   val image: String? = "",
+//   val value: String,
+//   val isMatched: Boolean = false,
+//   val isFaceUp: Boolean = false
 //)
 
 
