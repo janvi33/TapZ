@@ -3,8 +3,6 @@ package com.example.memory.presentation.settings
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material3.*
@@ -20,24 +18,29 @@ import com.example.memory.presentation.navigation.Routes
 fun SettingsScreen(
     isDarkTheme: Boolean = false,
     isSoundEnabled: Boolean = true,
-    onToggleTheme: () -> Unit,
-    onToggleSound: () -> Unit,
-    onLogoutConfirmed: () -> Unit,
-    onEditProfile: () -> Unit,
-    navController: NavController
+    onToggleTheme: (() -> Unit)? = null,
+    onToggleSound: (() -> Unit)? = null,
+    onLogoutConfirmed: (() -> Unit)? = null,
+    onEditProfile: (() -> Unit)? = null,
+    navController: NavController? = null
 ) {
     var showLogoutDialog by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Settings") },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Default.ChevronLeft, contentDescription = "Back")
+            // ✅ Only show back button if navController is provided
+            if (navController != null) {
+                TopAppBar(
+                    title = { Text("Settings") },
+                    navigationIcon = {
+                        IconButton(onClick = { navController.popBackStack() }) {
+                            Icon(Icons.Default.ChevronLeft, contentDescription = "Back")
+                        }
                     }
-                }
-            )
+                )
+            } else {
+                TopAppBar(title = { Text("Settings") })
+            }
         }
     ) { padding ->
         Column(
@@ -49,17 +52,18 @@ fun SettingsScreen(
             horizontalAlignment = Alignment.Start
         ) {
             // 🧑‍💼 Edit Profile Row
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable(onClick = { navController.navigate(Routes.EDIT_PROFILE) })  // ✅ This is enough
-                    .padding(vertical = 8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text("Edit Profile", modifier = Modifier.weight(1f))
-                Icon(Icons.Default.ChevronRight, contentDescription = "Edit Profile")
+            if (onEditProfile != null && navController != null) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable(onClick = onEditProfile)
+                        .padding(vertical = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text("Edit Profile", modifier = Modifier.weight(1f))
+                    Icon(Icons.Default.ChevronRight, contentDescription = "Edit Profile")
+                }
             }
-
 
             // 🌗 Theme Toggle
             Row(
@@ -70,10 +74,9 @@ fun SettingsScreen(
                 Spacer(modifier = Modifier.weight(1f))
                 Switch(
                     checked = isDarkTheme,
-                    onCheckedChange = { onToggleTheme() } // triggers viewModel logic
+                    onCheckedChange = { onToggleTheme?.invoke() } // ✅ Safe call
                 )
             }
-
 
             // 🔊 Sound Toggle
             Row(
@@ -82,24 +85,29 @@ fun SettingsScreen(
             ) {
                 Text("Sound")
                 Spacer(modifier = Modifier.weight(1f))
-                Switch(checked = isSoundEnabled, onCheckedChange = { onToggleSound() })
+                Switch(
+                    checked = isSoundEnabled,
+                    onCheckedChange = { onToggleSound?.invoke() } // ✅ Safe call
+                )
             }
 
             // 🚪 Logout Button
-            Button(
-                onClick = { showLogoutDialog = true },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.error
-                ),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Logout")
+            if (onLogoutConfirmed != null) {
+                Button(
+                    onClick = { showLogoutDialog = true },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.error
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Logout")
+                }
             }
         }
     }
 
     // 🧠 Logout Confirmation Dialog
-    if (showLogoutDialog) {
+    if (showLogoutDialog && onLogoutConfirmed != null) {
         AlertDialog(
             onDismissRequest = { showLogoutDialog = false },
             title = { Text("Confirm Logout") },

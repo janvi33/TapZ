@@ -12,6 +12,7 @@ import com.example.memory.presentation.auth.login.LoginScreen
 import com.example.memory.presentation.auth.signup.SignupScreen
 import com.example.memory.presentation.menu.MenuScreen
 import com.example.memory.presentation.game.GameScreen
+import com.example.memory.presentation.mainscreen.MainScreen
 import com.example.memory.presentation.profile.EditProfileScreen
 import com.example.memory.presentation.score.ScoresScreen
 import com.example.memory.presentation.settings.SettingsIntent
@@ -76,14 +77,9 @@ fun AppNavGraph(
 
 
         composable(Routes.MENU) {
-            MenuScreen(
-                onStartGameWithDifficulty = { difficulty ->
-                    navController.navigate("game/$difficulty")
-                },
-                onViewScores = { navController.navigate(Routes.SCORES) },
-                onOpenSettings = { navController.navigate(Routes.SETTINGS) }
-            )
+            MainScreen()
         }
+
 
 
 //        composable(Routes.GAME) {
@@ -104,32 +100,21 @@ fun AppNavGraph(
 
 
         composable(Routes.SCORES) {
-            ScoresScreen(navController = navController)
+            ScoresScreen()
         }
 
         composable(Routes.SETTINGS) {
-            if (settingsState.isLoggedOut) {
-                LaunchedEffect(Unit) {
-                    navController.navigate(Routes.LOGIN) {
-                        popUpTo(Routes.MENU) { inclusive = true }
-                    }
-                    onResetLogout()
-                }
-            }
-
             SettingsScreen(
+                navController = navController,
                 isDarkTheme = settingsState.isDarkTheme,
-                onToggleTheme = onToggleTheme,
                 isSoundEnabled = settingsState.isSoundOn,
+                onToggleTheme = onToggleTheme,
                 onToggleSound = onToggleSound,
                 onLogoutConfirmed = onLogoutConfirmed,
                 onEditProfile = {
                     navController.navigate(Routes.EDIT_PROFILE)
-                },
-                navController = navController
+                }
             )
         }
-
-
     }
 }
