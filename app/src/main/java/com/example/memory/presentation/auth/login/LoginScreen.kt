@@ -107,12 +107,12 @@ fun LoginScreenUI(
             Text(text = it, color = MaterialTheme.colorScheme.error)
         }
 
-        TextButton(onClick = onNavigateToSignup) {
-            Text("Don't have an account? Sign up")
-        }
-
         Button(onClick = onGoogleSignInClick, modifier = Modifier.fillMaxWidth()) {
             Text("Continue with Google")
+        }
+
+        TextButton(onClick = onNavigateToSignup) {
+            Text("Don't have an account? Sign up")
         }
     }
 
