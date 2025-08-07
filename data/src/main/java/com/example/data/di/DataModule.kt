@@ -1,6 +1,6 @@
 package com.example.data.di
 
-import com.example.data.remote.api.DisneyApiService
+import com.example.data.remote.api.DragonBallApiService
 import com.example.data.repository.CharacterRepositoryImpl
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -12,7 +12,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
-private const val BASE_URL = "https://api.disneyapi.dev/"
+private const val BASE_URL = "https://dragonball-api.com/api/"
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -32,8 +32,8 @@ object DataModule {
 
     @Provides
     @Singleton
-    fun provideDisneyApiService(retrofit: Retrofit): DisneyApiService =
-        retrofit.create(DisneyApiService::class.java)
+    fun provideDisneyApiService(retrofit: Retrofit): DragonBallApiService =
+        retrofit.create(DragonBallApiService::class.java)
 
     // -----------------------------------------------
     // 🔧 TEMPORARY HELPERS FOR TESTING WITHOUT HILT
@@ -45,8 +45,8 @@ object DataModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-    fun testProvideDisneyApi(): DisneyApiService =
-        testProvideRetrofit().create(DisneyApiService::class.java)
+    fun testProvideDisneyApi(): DragonBallApiService =
+        testProvideRetrofit().create(DragonBallApiService::class.java)
 
     fun testProvideCharacterRepository(): CharacterRepositoryImpl =
         CharacterRepositoryImpl(testProvideDisneyApi())

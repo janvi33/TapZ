@@ -2,7 +2,7 @@ package com.example.memory.presentation.menu
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -10,10 +10,12 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun MenuScreen(
-    onStartGame: () -> Unit,
+    onStartGameWithDifficulty: (String) -> Unit,
     onViewScores: () -> Unit,
     onOpenSettings: () -> Unit
 ) {
+    var showDifficultyDialog by remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -28,7 +30,7 @@ fun MenuScreen(
         )
 
         Button(
-            onClick = onStartGame,
+            onClick = { showDifficultyDialog = true },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 12.dp)
@@ -54,13 +56,48 @@ fun MenuScreen(
             Text(text = "⚙️ Settings")
         }
     }
+
+    if (showDifficultyDialog) {
+        AlertDialog(
+            onDismissRequest = { showDifficultyDialog = false },
+            title = { Text("Choose Difficulty") },
+            text = {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Button(onClick = {
+                        showDifficultyDialog = false
+                        onStartGameWithDifficulty("Easy")
+                    }) {
+                        Text("Easy")
+                    }
+
+                    Button(onClick = {
+                        showDifficultyDialog = false
+                        onStartGameWithDifficulty("Medium")
+                    }) {
+                        Text("Medium")
+                    }
+
+                    Button(onClick = {
+                        showDifficultyDialog = false
+                        onStartGameWithDifficulty("Hard")
+                    }) {
+                        Text("Hard")
+                    }
+                }
+            },
+            confirmButton = {},
+            dismissButton = {}
+        )
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun MenuScreenPreview() {
     MenuScreen(
-        onStartGame = {},
+        onStartGameWithDifficulty = {},
         onViewScores = {},
         onOpenSettings = {}
     )

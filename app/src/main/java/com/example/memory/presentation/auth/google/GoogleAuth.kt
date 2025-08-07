@@ -62,9 +62,9 @@ class GoogleAuth(
     }
 
 
-    fun signOut() {
-        firebaseAuth.signOut()
-    }
+//    fun signOut() {
+//        firebaseAuth.signOut()
+//    }
 
     private suspend fun handleSignIn(
         credential: Credential,
