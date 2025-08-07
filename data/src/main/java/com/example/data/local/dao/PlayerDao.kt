@@ -12,5 +12,5 @@ interface PlayerDao {
     suspend fun insertPlayer(player: PlayerEntity)
 
     @Query("SELECT * FROM player WHERE email = :email LIMIT 1")
-    suspend fun getPlayer(email: String): PlayerEntity?
+    suspend fun getPlayer(email: String): PlayerEntity
 }

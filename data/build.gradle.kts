@@ -84,11 +84,11 @@ dependencies {
     androidTestImplementation("androidx.test:runner:1.5.2")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
-    // ✅ Room testing (includes in-memory DB)
+    // Room testing (includes in-memory DB)
     androidTestImplementation("androidx.room:room-testing:2.6.1")
     implementation("com.google.firebase:firebase-auth:22.3.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.1")
-    // ✅ Coroutine testing
+    //  Coroutine testing
     androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.0")
 
 
@@ -103,4 +103,5 @@ dependencies {
     // Coroutines test
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
     testImplementation(kotlin("test"))
+
 }

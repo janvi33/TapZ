@@ -4,9 +4,11 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.data.local.dao.PlayerDao
 import com.example.data.local.dao.ScoreDao
 import com.example.data.local.dao.SettingsDao
 import com.example.data.local.db.MemoryDatabase
+import com.example.data.local.entity.PlayerEntity
 import com.example.data.local.entity.ScoreEntity
 import com.example.data.local.entity.SettingsEntity
 import kotlinx.coroutines.flow.first
@@ -15,8 +17,6 @@ import org.junit.*
 import org.junit.Assert.assertEquals
 import org.junit.runner.RunWith
 
-
-// ✅ SettingsDao Test
 @RunWith(AndroidJUnit4::class)
 class SettingsDaoTest {
 
@@ -62,7 +62,6 @@ class SettingsDaoTest {
     }
 }
 
-// ✅ ScoreDao Test
 @RunWith(AndroidJUnit4::class)
 class ScoreDaoTest {
 
@@ -95,5 +94,46 @@ class ScoreDaoTest {
 
         assertEquals(1, result.size)
         assertEquals(score, result[0])
+    }
+}
+
+@RunWith(AndroidJUnit4::class)
+class PlayerDaoTest {
+
+    private lateinit var db: MemoryDatabase
+    private lateinit var dao: PlayerDao
+
+    @Before
+    fun setup() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        db = Room.inMemoryDatabaseBuilder(context, MemoryDatabase::class.java)
+            .allowMainThreadQueries()
+            .build()
+        dao = db.playerDao()
+    }
+
+    @After
+    fun teardown() {
+        db.close()
+    }
+
+    @Test
+    fun insertAndRetrievePlayer() = runTest {
+        val player = PlayerEntity(
+            email = "keeru@example.com",
+            name = "Keerthana",
+            joinedDate = "2025-08-07",
+            streak = 5,
+            totalScore = 300
+        )
+
+        dao.insertPlayer(player)
+        val result = dao.getPlayer("keeru@example.com")
+
+        assertEquals(player.email, result?.email)
+        assertEquals(player.name, result?.name)
+        assertEquals(player.joinedDate, result?.joinedDate)
+        assertEquals(player.streak, result?.streak)
+        assertEquals(player.totalScore, result?.totalScore)
     }
 }

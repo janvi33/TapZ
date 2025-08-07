@@ -2,16 +2,19 @@ package com.example.data.di
 
 import android.app.Application
 import androidx.room.Room
+import com.example.data.local.dao.PlayerDao
 import com.example.data.local.dao.ScoreDao
 import com.example.data.local.dao.SettingsDao
 import com.example.data.local.db.MemoryDatabase
 import com.example.data.remote.api.DragonBallApiService
 import com.example.data.repository.AuthRepositoryImpl
 import com.example.data.repository.CardRepositoryImpl
+import com.example.data.repository.PlayerRepositoryImpl
 import com.example.data.repository.ScoreRepositoryImpl
 import com.example.data.repository.SettingsRepositoryImpl
 import com.example.domain.repository.AuthRepository
 import com.example.domain.repository.CardRepository
+import com.example.domain.repository.PlayerRepository
 import com.example.domain.repository.ScoreRepository
 import com.example.domain.repository.SettingsRepository
 import com.google.firebase.auth.FirebaseAuth
@@ -82,4 +85,14 @@ object DataModule {
     @Singleton
     fun provideSettingsRepository(dao: SettingsDao): SettingsRepository =
         SettingsRepositoryImpl(dao)
+
+    @Provides
+    @Singleton
+    fun providePlayerRepository(dao: PlayerDao): PlayerRepository =
+        PlayerRepositoryImpl(dao)
+
+    @Provides
+    @Singleton
+    fun providePlayerDao(db: MemoryDatabase): PlayerDao = db.playerDao()
+
 }
