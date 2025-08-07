@@ -1,4 +1,4 @@
-package com.example.domain.usecase
+package com.example.domain.usecase.card
 
 import com.example.domain.model.Card
 import com.example.domain.repository.CardRepository
