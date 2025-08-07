@@ -1,5 +1,6 @@
 [versions]
 agp = "8.11.1"
+credentialsVersion = "1.2.0-alpha04"
 kotlin = "2.0.21"
 coreKtx = "1.16.0"
 junit = "4.13.2"
@@ -21,10 +22,13 @@ credentials = "1.5.0"
 credentialsPlayServicesAuth = "1.5.0"
 googleid = "1.1.1"
 firebaseAuthKtx = "24.0.0"
+material3Android = "1.3.2"
+firebaseCrashlyticsBuildtools = "3.0.5"
 
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-credentials-v120alpha04 = { module = "androidx.credentials:credentials", version.ref = "credentialsVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -37,7 +41,7 @@ androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
-androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3Android" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
@@ -49,6 +53,9 @@ firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "fir
 google-firebase-auth = { module = "com.google.firebase:firebase-auth" }
 google-firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 google-firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
+androidx-material3-android = { group = "androidx.compose.material3", name = "material3-android", version.ref = "material3Android" }
+firebase-crashlytics-buildtools = { group = "com.google.firebase", name = "firebase-crashlytics-buildtools", version.ref = "firebaseCrashlyticsBuildtools" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

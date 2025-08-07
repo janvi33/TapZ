@@ -12,7 +12,20 @@
           "package_name": "com.example.memory"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "25082278616-3ofnno3a3hecnvb2mvtb5nv7ebsp4gks.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.memory",
+            "certificate_hash": "fd262290309c37ab4f47e9d3718503d985793bde"
+          }
+        },
+        {
+          "client_id": "25082278616-j6ju533ocsnggb9bod9l8ea1sukm2i2i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDsUMG322OeQUaNyF8oGh0e5LasFM9QW4U"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "25082278616-j6ju533ocsnggb9bod9l8ea1sukm2i2i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
