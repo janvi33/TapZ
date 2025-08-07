@@ -18,12 +18,11 @@ class SettingsViewModel @Inject constructor(
         when (event) {
             SettingsIntent.ToggleTheme -> {
                 state = state.copy(isDarkTheme = !state.isDarkTheme)
-                // You can persist this with DataStore if needed
             }
 
             SettingsIntent.ToggleSound -> {
                 state = state.copy(isSoundOn = !state.isSoundOn)
-                // Also persist this if needed
+
             }
 
             SettingsIntent.LogoutClicked -> {
