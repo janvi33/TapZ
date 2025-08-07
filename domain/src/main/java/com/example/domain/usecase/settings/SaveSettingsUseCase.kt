@@ -1,4 +1,4 @@
-package com.example.domain.usecase
+package com.example.domain.usecase.settings
 
 import com.example.domain.model.Settings
 import com.example.domain.repository.SettingsRepository
