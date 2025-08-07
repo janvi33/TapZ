@@ -58,6 +58,7 @@ dependencies {
     implementation(libs.googleid)
     implementation(libs.androidx.material3.android)
     implementation(libs.firebase.crashlytics.buildtools)
+    implementation(libs.androidx.navigation.runtime.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -79,10 +80,11 @@ dependencies {
     implementation(libs.google.firebase.analytics)
     implementation(libs.googleid)
 
+    //coil
+    implementation("io.coil-kt:coil-compose:2.5.0") // or latest
+    implementation("io.coil-kt:coil-gif:2.5.0") // for GIF support
 
-
-
-
+    implementation("androidx.compose.material:material-icons-extended")
 
     implementation("com.google.android.gms:play-services-auth:20.7.0")
 

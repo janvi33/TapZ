@@ -1,5 +1,6 @@
 package com.example.memory.presentation.navigation
 
+import SplashScreen
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -11,23 +12,31 @@ import com.example.memory.presentation.auth.login.LoginScreen
 import com.example.memory.presentation.auth.signup.SignupScreen
 import com.example.memory.presentation.menu.MenuScreen
 import com.example.memory.presentation.game.GameScreen
+import com.example.memory.presentation.profile.EditProfileScreen
 import com.example.memory.presentation.score.ScoresScreen
 import com.example.memory.presentation.settings.SettingsIntent
 import com.example.memory.presentation.settings.SettingsScreen
 import com.example.memory.presentation.settings.SettingsViewModel
 
 object Routes {
+    const val EDIT_PROFILE = "edit_profile"
     const val LOGIN = "login"
     const val SIGNUP = "signup"
     const val MENU = "menu"
     const val GAME = "game"
+    const val GAME_WITH_DIFF = "game/{difficulty}"
     const val SCORES = "scores"
     const val SETTINGS = "settings"
+    const val SPLASH = "splash"
 }
 
 @Composable
 fun AppNavGraph(navController: NavHostController, modifier: Modifier = Modifier) {
-    NavHost(navController = navController, startDestination = Routes.LOGIN) {
+    NavHost(navController = navController, startDestination = Routes.SPLASH) {
+
+        composable(Routes.SPLASH) {
+            SplashScreen(navController)
+        }
 
         composable(Routes.LOGIN) {
             LoginScreen(
@@ -49,6 +58,9 @@ fun AppNavGraph(navController: NavHostController, modifier: Modifier = Modifier)
                     navController.navigate(Routes.LOGIN) {
                         popUpTo(Routes.SIGNUP) { inclusive = true }
                     }
+                },
+                onNavigateToLogin = {
+                    navController.navigate(Routes.LOGIN)
                 }
             )
         }
@@ -56,18 +68,34 @@ fun AppNavGraph(navController: NavHostController, modifier: Modifier = Modifier)
 
         composable(Routes.MENU) {
             MenuScreen(
-                onStartGame = { navController.navigate(Routes.GAME) },
+                onStartGameWithDifficulty = { difficulty ->
+                    navController.navigate("game/$difficulty")
+                },
                 onViewScores = { navController.navigate(Routes.SCORES) },
                 onOpenSettings = { navController.navigate(Routes.SETTINGS) }
             )
         }
 
-        composable(Routes.GAME) {
-            GameScreen()
+
+//        composable(Routes.GAME) {
+//            GameScreen(navController = navController)
+//        }
+
+        composable("${Routes.GAME}/{difficulty}") { backStackEntry ->
+            val difficulty = backStackEntry.arguments?.getString("difficulty") ?: "Easy"
+            GameScreen(difficulty = difficulty, navController = navController)
         }
 
+        composable(Routes.EDIT_PROFILE) {
+            EditProfileScreen(navController = navController)
+        }
+
+
+
+
+
         composable(Routes.SCORES) {
-            ScoresScreen()
+            ScoresScreen(navController = navController)
         }
 
         composable(Routes.SETTINGS) {
@@ -88,7 +116,11 @@ fun AppNavGraph(navController: NavHostController, modifier: Modifier = Modifier)
                 isSoundEnabled = state.isSoundOn,
                 onToggleTheme = { viewModel.onEvent(SettingsIntent.ToggleTheme) },
                 onToggleSound = { viewModel.onEvent(SettingsIntent.ToggleSound) },
-                onLogoutConfirmed = { viewModel.onEvent(SettingsIntent.LogoutClicked) }
+                onLogoutConfirmed = { viewModel.onEvent(SettingsIntent.LogoutClicked) },
+                onEditProfile = {
+                    navController.navigate(Routes.EDIT_PROFILE)
+                },
+                navController = navController
             )
         }
 
