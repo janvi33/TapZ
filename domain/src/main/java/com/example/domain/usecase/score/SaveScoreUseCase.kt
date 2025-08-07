@@ -1,4 +1,4 @@
-package com.example.domain.usecase
+package com.example.domain.usecase.score
 
 import com.example.domain.model.Score
 import com.example.domain.repository.ScoreRepository
