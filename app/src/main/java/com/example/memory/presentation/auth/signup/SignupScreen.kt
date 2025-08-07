@@ -13,7 +13,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 fun SignupScreen(
     onSignupSuccess: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: SignupViewModel = hiltViewModel()
+    viewModel: SignupViewModel = hiltViewModel(),
+    onNavigateToLogin: () -> Unit
 ) {
     val state = viewModel.state
 
@@ -70,6 +71,10 @@ fun SignupScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(if (state.isLoading) "Signing up..." else "Sign Up")
+        }
+
+        TextButton(onClick = onNavigateToLogin) {
+            Text("Already have an account? Log In")
         }
 
         state.error?.let {
