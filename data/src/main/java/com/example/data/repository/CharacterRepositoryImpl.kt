@@ -1,12 +1,16 @@
+// data/repository/CharacterRepositoryImpl.kt
 package com.example.data.repository
 
-import com.example.data.remote.api.DisneyApiService
+import com.example.data.remote.api.DragonBallApiService
 import javax.inject.Inject
 
-class CharacterRepositoryImpl @Inject constructor(
-    private val api: DisneyApiService
+class CharacterRepositoryImpl(
+    private val api: DragonBallApiService
 ) {
     suspend fun getCharacterImages(): List<String> {
-        return api.getCharacters().data.map { it.imageUrl }
+        val response = api.getCharacters()
+        return response.items.map { it.image }
     }
 }
+
+
