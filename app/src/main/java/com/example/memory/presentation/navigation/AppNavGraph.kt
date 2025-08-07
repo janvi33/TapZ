@@ -16,6 +16,7 @@ import com.example.memory.presentation.profile.EditProfileScreen
 import com.example.memory.presentation.score.ScoresScreen
 import com.example.memory.presentation.settings.SettingsIntent
 import com.example.memory.presentation.settings.SettingsScreen
+import com.example.memory.presentation.settings.SettingsState
 import com.example.memory.presentation.settings.SettingsViewModel
 
 object Routes {
@@ -31,7 +32,15 @@ object Routes {
 }
 
 @Composable
-fun AppNavGraph(navController: NavHostController, modifier: Modifier = Modifier) {
+fun AppNavGraph(
+    navController: NavHostController,
+    modifier: Modifier = Modifier,
+    settingsState: SettingsState,
+    onToggleTheme: () -> Unit,
+    onToggleSound: () -> Unit,
+    onLogoutConfirmed: () -> Unit,
+    onResetLogout: () -> Unit
+){
     NavHost(navController = navController, startDestination = Routes.SPLASH) {
 
         composable(Routes.SPLASH) {
@@ -99,30 +108,28 @@ fun AppNavGraph(navController: NavHostController, modifier: Modifier = Modifier)
         }
 
         composable(Routes.SETTINGS) {
-            val viewModel: SettingsViewModel = hiltViewModel()
-            val state = viewModel.state
-
-            if (state.isLoggedOut) {
+            if (settingsState.isLoggedOut) {
                 LaunchedEffect(Unit) {
                     navController.navigate(Routes.LOGIN) {
                         popUpTo(Routes.MENU) { inclusive = true }
                     }
-                    viewModel.resetLogoutFlag()
+                    onResetLogout()
                 }
             }
 
             SettingsScreen(
-                isDarkTheme = state.isDarkTheme,
-                isSoundEnabled = state.isSoundOn,
-                onToggleTheme = { viewModel.onEvent(SettingsIntent.ToggleTheme) },
-                onToggleSound = { viewModel.onEvent(SettingsIntent.ToggleSound) },
-                onLogoutConfirmed = { viewModel.onEvent(SettingsIntent.LogoutClicked) },
+                isDarkTheme = settingsState.isDarkTheme,
+                onToggleTheme = onToggleTheme,
+                isSoundEnabled = settingsState.isSoundOn,
+                onToggleSound = onToggleSound,
+                onLogoutConfirmed = onLogoutConfirmed,
                 onEditProfile = {
                     navController.navigate(Routes.EDIT_PROFILE)
                 },
                 navController = navController
             )
         }
+
 
     }
 }

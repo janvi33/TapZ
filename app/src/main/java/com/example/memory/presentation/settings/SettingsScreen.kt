@@ -68,8 +68,12 @@ fun SettingsScreen(
             ) {
                 Text("Dark Theme")
                 Spacer(modifier = Modifier.weight(1f))
-                Switch(checked = isDarkTheme, onCheckedChange = { onToggleTheme() })
+                Switch(
+                    checked = isDarkTheme,
+                    onCheckedChange = { onToggleTheme() } // triggers viewModel logic
+                )
             }
+
 
             // 🔊 Sound Toggle
             Row(
