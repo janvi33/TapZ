@@ -4,5 +4,4 @@ import com.example.domain.model.Card
 
 interface CardRepository {
     suspend fun getAllCards(): List<Card>
-    suspend fun getCard(card: Card): Card
 }

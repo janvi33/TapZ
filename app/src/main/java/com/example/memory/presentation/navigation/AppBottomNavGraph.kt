@@ -26,7 +26,15 @@ fun AppBottomNavGraph(navController: NavHostController) {
             ScoresScreen()
         }
         composable(BottomNavItem.Settings.route) {
-            SettingsScreen()
+            SettingsScreen(
+                onLogoutConfirmed = {
+                    // After Firebase signOut (done in VM), go to Start tab
+                    navController.navigate(BottomNavItem.Start.route) {
+                        popUpTo(BottomNavItem.Start.route) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                }
+            )
         }
     }
 }
