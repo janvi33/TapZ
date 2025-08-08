@@ -10,6 +10,7 @@ import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.memory.presentation.navigation.BottomNavItem
 import com.example.memory.presentation.navigation.Routes
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -91,9 +92,8 @@ fun GameScreen(
                         TextButton(onClick = {
                             showExitDialog = false
                             viewModel.onEvent(GameIntent.GoToMenu)
-                            navController.navigate(Routes.MENU) {
-                                popUpTo(Routes.GAME) { inclusive = true }
-                            }
+                            navController.popBackStack(BottomNavItem.Start.route, inclusive = false)
+
                         }) {
                             Text("Exit")
                         }
@@ -141,7 +141,7 @@ fun GameScreen(
 
                             TextButton(onClick = {
                                 showWinDialog = false
-                                navController.navigate(Routes.MENU) {
+                                navController.navigate(Routes.MAIN) {
                                     popUpTo(Routes.GAME) { inclusive = true }
                                 }
                             }) {
