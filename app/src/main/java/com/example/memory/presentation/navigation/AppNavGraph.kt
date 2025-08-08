@@ -10,7 +10,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.memory.presentation.auth.login.LoginScreen
 import com.example.memory.presentation.auth.signup.SignupScreen
-import com.example.memory.presentation.menu.MenuScreen
 import com.example.memory.presentation.game.GameScreen
 import com.example.memory.presentation.mainscreen.MainScreen
 import com.example.memory.presentation.profile.EditProfileScreen
@@ -24,7 +23,7 @@ object Routes {
     const val EDIT_PROFILE = "edit_profile"
     const val LOGIN = "login"
     const val SIGNUP = "signup"
-    const val MENU = "menu"
+    const val MAIN = "main"
     const val GAME = "game"
     const val GAME_WITH_DIFF = "game/{difficulty}"
     const val SCORES = "scores"
@@ -51,7 +50,7 @@ fun AppNavGraph(
         composable(Routes.LOGIN) {
             LoginScreen(
                 onLoginSuccess = {
-                    navController.navigate(Routes.MENU) {
+                    navController.navigate(Routes.MAIN) {
                         popUpTo(Routes.LOGIN) { inclusive = true }
                     }
                 },
@@ -76,7 +75,7 @@ fun AppNavGraph(
         }
 
 
-        composable(Routes.MENU) {
+        composable(Routes.MAIN) {
             MainScreen()
         }
 

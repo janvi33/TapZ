@@ -17,6 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.memory.presentation.navigation.AppBottomNavGraph
 import com.example.memory.presentation.navigation.BottomNavItem
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.navigation.compose.currentBackStackEntryAsState
 
 
 @Composable
@@ -29,51 +30,63 @@ fun MainScreen() {
     )
     var selectedItem by remember { mutableStateOf(0) }
 
+    // 👇 observe current route
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = backStackEntry?.destination?.route
+
+    // 👇 show bottom bar only on root tabs
+    val showBottomBar = currentRoute in setOf(
+        BottomNavItem.Start.route,
+        BottomNavItem.Score.route,
+        BottomNavItem.Settings.route
+    )
+    // Note: GameScreen composable is declared as "start/{difficulty}", so it won't match "start"
+
     Scaffold(
         bottomBar = {
-            NavigationBar(
-                containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
-            ) {
-                items.forEachIndexed { index, item ->
-                    val scale by animateFloatAsState(if (selectedItem == index) 1.3f else 1f)
-                    val verticalOffset by animateDpAsState(if (selectedItem == index) (-2).dp else 0.dp)
+            if (showBottomBar) {
+                NavigationBar(
+                    containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
+                ) {
+                    items.forEachIndexed { index, item ->
+                        val scale by animateFloatAsState(if (selectedItem == index) 1.3f else 1f)
+                        val verticalOffset by animateDpAsState(if (selectedItem == index) (-2).dp else 0.dp)
 
-                    NavigationBarItem(
-                        icon = {
-                            Box(modifier = Modifier.size(52.dp), contentAlignment = Alignment.Center) {
-                                Image(
-                                    painter = painterResource(id = item.iconRes),
-                                    contentDescription = item.label,
-                                    modifier = Modifier
-                                        .size(45.dp) // icon smaller than box for padding
-                                        .offset(y = verticalOffset)
-                                        .graphicsLayer {
-                                            scaleX = scale
-                                            scaleY = scale
-                                        }
-                                )
-                            }
-                        },
-                        label = { Text(item.label) },
-                        selected = selectedItem == index,
-                        onClick = {
-                            selectedItem = index
-                            navController.navigate(item.route) {
-                                popUpTo(navController.graph.startDestinationId) {
-                                    saveState = true
+                        NavigationBarItem(
+                            icon = {
+                                Box(modifier = Modifier.size(52.dp), contentAlignment = Alignment.Center) {
+                                    Image(
+                                        painter = painterResource(id = item.iconRes),
+                                        contentDescription = item.label,
+                                        modifier = Modifier
+                                            .size(45.dp)
+                                            .offset(y = verticalOffset)
+                                            .graphicsLayer {
+                                                scaleX = scale
+                                                scaleY = scale
+                                            }
+                                    )
                                 }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        },
-                        colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = MaterialTheme.colorScheme.primary,
-                            unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                            selectedTextColor = MaterialTheme.colorScheme.primary,
-                            unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                            indicatorColor = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.7f)
+                            },
+                            label = { Text(item.label) },
+                            selected = selectedItem == index,
+                            onClick = {
+                                selectedItem = index
+                                navController.navigate(item.route) {
+                                    popUpTo(navController.graph.startDestinationId) { saveState = true }
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
+                            },
+                            colors = NavigationBarItemDefaults.colors(
+                                selectedIconColor = MaterialTheme.colorScheme.primary,
+                                unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                selectedTextColor = MaterialTheme.colorScheme.primary,
+                                unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                indicatorColor = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.7f)
+                            )
                         )
-                    )
+                    }
                 }
             }
         }
