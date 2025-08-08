@@ -6,13 +6,15 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.domain.repository.CardRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import jakarta.inject.Inject
+import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @HiltViewModel
 class GameViewModel @Inject constructor(
+    private val cardRepository: CardRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -23,12 +25,6 @@ class GameViewModel @Inject constructor(
 
     private var timerRunning = false
 
-    private val emojiPool = listOf(
-        "🐶", "🐱", "🐻", "🦊", "🐼", "🐸",
-        "🐵", "🦁", "🐯", "🐮", "🐷", "🐔",
-        "🐙", "🐳", "🦄", "🐍"
-    )
-
     init {
         startNewGame()
     }
@@ -37,9 +33,7 @@ class GameViewModel @Inject constructor(
         when (intent) {
             is GameIntent.CardClicked -> handleCardClick(intent.index)
             is GameIntent.RestartGame -> restartGame()
-            is GameIntent.GoToMenu -> {
-                // Handled in UI
-            }
+            is GameIntent.GoToMenu -> { /* handled in UI */ }
             is GameIntent.TimerTick -> incrementTimer()
             is GameIntent.ErrorOccurred -> state = state.copy(error = intent.message)
         }
@@ -58,31 +52,56 @@ class GameViewModel @Inject constructor(
             score = 0,
             timeElapsed = 0,
             matchedIndices = emptySet(),
-            flippedCardIndex = null
+            flippedCardIndex = null,
+            error = null
         )
 
-        val numberOfPairs = when (difficulty) {
-            "Easy" -> 3
-            "Medium" -> 6
-            "Hard" -> 8
-            else -> 6
+        viewModelScope.launch {
+            try {
+                val numberOfPairs = when (difficulty) {
+                    "Easy" -> 3
+                    "Medium" -> 6
+                    "Hard" -> 8
+                    else -> 6
+                }
+
+                // 1) Fetch domain cards (with image URLs) from API via repository
+                val domainCards = cardRepository.getAllCards()
+
+                if (domainCards.isEmpty()) {
+                    state = state.copy(isLoading = false, error = "No cards returned from API")
+                    return@launch
+                }
+
+                // 2) Pick as many images as we need; if fewer available, cycle them
+                val baseImages = domainCards.map { it.image.orEmpty() }.filter { it.isNotBlank() }
+                if (baseImages.isEmpty()) {
+                    state = state.copy(isLoading = false, error = "API returned empty image URLs")
+                    return@launch
+                }
+
+                val images: List<String> =
+                    if (baseImages.size >= numberOfPairs) {
+                        baseImages.take(numberOfPairs)
+                    } else {
+                        generateSequence { baseImages }.flatten().take(numberOfPairs).toList()
+                    }
+
+                // 3) Create pairs and shuffle
+                val imagePairs = (images + images).shuffled()
+
+                // 4) Map to UI cards
+                val cards = imagePairs.mapIndexed { index, url ->
+                    GameCard(id = index, imageUrl = url)
+                }
+
+                state = state.copy(cards = cards, isLoading = false)
+                startTimer()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                state = state.copy(isLoading = false, error = e.message ?: "Failed to load cards")
+            }
         }
-
-        val selected = emojiPool.shuffled().take(numberOfPairs)
-        val emojiPairs = (selected + selected).shuffled()
-
-        val cards = emojiPairs.mapIndexed { index, emoji ->
-            GameCard(id = index, imageUrl = emoji)
-        }
-
-
-
-        state = state.copy(
-            cards = cards,
-            isLoading = false
-        )
-
-        startTimer()
     }
 
     private fun handleCardClick(index: Int) {

@@ -1,6 +1,5 @@
 package com.example.memory.presentation.game
 
-
 data class GameState(
     val difficulty: String = "Easy",
     val timeElapsed: Int = 0, // in seconds
