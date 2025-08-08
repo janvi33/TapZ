@@ -31,8 +31,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+
 import coil.compose.AsyncImage
 import com.example.memory.R
+
 import com.example.memory.presentation.navigation.BottomNavItem
 import com.example.memory.presentation.navigation.Routes
 
@@ -155,6 +157,8 @@ fun GameScreen(
                 showWinDialog = false
                 viewModel.onEvent(GameIntent.GoToMenu)
                 navController.popBackStack(BottomNavItem.Start.route, inclusive = false)
+
+
             }
         )
     }
@@ -190,6 +194,7 @@ private fun TopBarFancy(
     )
     val accent = Color(0xFFFFA726) // orange accent (not neon)
 
+
     // Only an orange glow line as the “shadow”
     Box(
         modifier = Modifier
@@ -210,6 +215,7 @@ private fun TopBarFancy(
                         listOf(Color(0x22FFB74D), Color(0x11FF8A65))
                     ),
                     RoundedCornerShape(22.dp)
+
                 )
         ) {
             Row(
