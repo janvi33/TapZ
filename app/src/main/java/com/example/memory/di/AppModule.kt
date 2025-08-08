@@ -13,7 +13,7 @@ import jakarta.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-
-    @Provides
-    fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
+//
+//    @Provides
+//    fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
 }

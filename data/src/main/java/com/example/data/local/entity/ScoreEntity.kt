@@ -11,6 +11,7 @@ import androidx.room.PrimaryKey
 
 data class ScoreEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    val playerEmail: String,
     val bestScore: Int,
     val bestTime: Int
 )

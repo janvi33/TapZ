@@ -7,14 +7,23 @@ import com.example.domain.model.Score
 import com.example.domain.repository.ScoreRepository
 import kotlinx.coroutines.flow.first
 
-//class ScoreRepositoryImpl(
-//    private val dao: ScoreDao
-//) : ScoreRepository {
-//    override suspend fun getScore(): List<Score> {
-//        return dao.getAllScores().first().map { it.toDomain() }
-//    }
-//
-//    override suspend fun saveScore(score: Score) {
-//        dao.insertScore(score.toEntity())
-//    }
-//}
+class ScoreRepositoryImpl(
+    private val dao: ScoreDao
+) : ScoreRepository {
+
+    override suspend fun getScore(): List<Score> {
+        return dao.getScoresByEmail("default@email.com").first().map { it.toDomain() }
+    }
+
+    override suspend fun getScoreForUser(email: String): List<Score> {
+        return dao.getScoresByEmail(email).first().map { it.toDomain() }
+    }
+
+    override suspend fun saveScore(score: Score) {
+        dao.insertScore(score.toEntity())
+    }
+
+    override suspend fun deleteScore(score: Score) {
+        dao.deleteScore(score.toEntity())
+    }
+}

@@ -19,4 +19,6 @@ abstract class MemoryDatabase : RoomDatabase() {
     abstract fun scoreDao(): ScoreDao
     abstract fun settingsDao(): SettingsDao
     abstract fun playerDao(): PlayerDao
+
+
 }

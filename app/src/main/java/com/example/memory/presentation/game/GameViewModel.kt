@@ -1,18 +1,19 @@
 package com.example.memory.presentation.game
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.domain.model.Card
+import com.example.domain.repository.CardRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import jakarta.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class GameViewModel @Inject constructor(
+    private val cardRepository: CardRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -22,12 +23,6 @@ class GameViewModel @Inject constructor(
         private set
 
     private var timerRunning = false
-
-    private val emojiPool = listOf(
-        "🐶", "🐱", "🐻", "🦊", "🐼", "🐸",
-        "🐵", "🦁", "🐯", "🐮", "🐷", "🐔",
-        "🐙", "🐳", "🦄", "🐍"
-    )
 
     init {
         startNewGame()
@@ -52,37 +47,47 @@ class GameViewModel @Inject constructor(
     }
 
     private fun startNewGame() {
-        state = state.copy(
-            isLoading = true,
-            isGameOver = false,
-            score = 0,
-            timeElapsed = 0,
-            matchedIndices = emptySet(),
-            flippedCardIndex = null
-        )
+        viewModelScope.launch {
+            try {
+                state = state.copy(isLoading = true)
 
-        val numberOfPairs = when (difficulty) {
-            "Easy" -> 3
-            "Medium" -> 6
-            "Hard" -> 8
-            else -> 6
+                val numberOfPairs = when (difficulty) {
+                    "Easy" -> 3
+                    "Medium" -> 6
+                    "Hard" -> 8
+                    else -> 6
+                }
+
+                val allCards: List<Card> = cardRepository.getAllCards()
+                val selected = allCards.shuffled().take(numberOfPairs)
+                val emojiPairs = (selected + selected).shuffled()
+
+                val cards = emojiPairs.mapIndexed { index, card ->
+                    GameCard(
+                        id = index,
+                        imageUrl = card.emoji // 🔁 Use API image field
+                    )
+                }
+
+                state = state.copy(
+                    cards = cards,
+                    isLoading = false,
+                    isGameOver = false,
+                    score = 0,
+                    timeElapsed = 0,
+                    matchedIndices = emptySet(),
+                    flippedCardIndex = null
+                )
+
+                startTimer()
+
+            } catch (e: Exception) {
+                state = state.copy(
+                    isLoading = false,
+                    error = "Error loading cards: ${e.localizedMessage}"
+                )
+            }
         }
-
-        val selected = emojiPool.shuffled().take(numberOfPairs)
-        val emojiPairs = (selected + selected).shuffled()
-
-        val cards = emojiPairs.mapIndexed { index, emoji ->
-            GameCard(id = index, imageUrl = emoji)
-        }
-
-
-
-        state = state.copy(
-            cards = cards,
-            isLoading = false
-        )
-
-        startTimer()
     }
 
     private fun handleCardClick(index: Int) {
@@ -91,7 +96,6 @@ class GameViewModel @Inject constructor(
         val cards = state.cards.toMutableList()
 
         if (state.flippedCardIndex == null) {
-            // Flip first card
             cards[index] = cards[index].copy(isFlipped = true)
             state = state.copy(cards = cards, flippedCardIndex = index)
         } else {
@@ -107,7 +111,6 @@ class GameViewModel @Inject constructor(
                 delay(700)
 
                 if (firstCard.imageUrl == secondCard.imageUrl) {
-                    // Matched
                     updatedCards[firstIndex] = firstCard.copy(isMatched = true)
                     updatedCards[index] = secondCard.copy(isMatched = true)
                     state = state.copy(
@@ -117,7 +120,6 @@ class GameViewModel @Inject constructor(
                         score = state.score + 10
                     )
                 } else {
-                    // Not matched — flip back both
                     updatedCards[firstIndex] = firstCard.copy(isFlipped = false)
                     updatedCards[index] = secondCard.copy(isFlipped = false)
                     state = state.copy(

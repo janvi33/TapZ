@@ -2,16 +2,22 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "bbb9e4127a02c02e24e7310ec3b3669b",
+    "identityHash": "e7c13ea63db6a67d977ff5fe0e716e4d",
     "entities": [
       {
         "tableName": "score",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `bestScore` INTEGER NOT NULL, `bestTime` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `playerEmail` TEXT NOT NULL, `bestScore` INTEGER NOT NULL, `bestTime` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "playerEmail",
+            "columnName": "playerEmail",
+            "affinity": "TEXT",
             "notNull": true
           },
           {
@@ -100,12 +106,12 @@
       },
       {
         "tableName": "player",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`email` TEXT NOT NULL, `name` TEXT NOT NULL, `joinedDate` TEXT NOT NULL, `streak` INTEGER NOT NULL, `totalScore` INTEGER NOT NULL, PRIMARY KEY(`email`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `email` TEXT NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
-            "fieldPath": "email",
-            "columnName": "email",
-            "affinity": "TEXT",
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
             "notNull": true
           },
           {
@@ -115,28 +121,16 @@
             "notNull": true
           },
           {
-            "fieldPath": "joinedDate",
-            "columnName": "joinedDate",
+            "fieldPath": "email",
+            "columnName": "email",
             "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "streak",
-            "columnName": "streak",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "totalScore",
-            "columnName": "totalScore",
-            "affinity": "INTEGER",
             "notNull": true
           }
         ],
         "primaryKey": {
           "autoGenerate": false,
           "columnNames": [
-            "email"
+            "id"
           ]
         },
         "indices": [],
@@ -146,7 +140,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'bbb9e4127a02c02e24e7310ec3b3669b')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e7c13ea63db6a67d977ff5fe0e716e4d')"
     ]
   }
 }

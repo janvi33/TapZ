@@ -22,6 +22,7 @@ class SignupViewModel @Inject constructor(
             is SignupIntent.EmailChanged -> {
                 state = state.copy(email = intent.email)
             }
+
             is SignupIntent.PasswordChanged -> {
                 state = state.copy(password = intent.password)
             }
@@ -70,4 +71,6 @@ class SignupViewModel @Inject constructor(
     fun resetSuccessFlag() {
         state = state.copy(isSuccess = false)
     }
+
 }
+
